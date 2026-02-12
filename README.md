@@ -32,7 +32,7 @@ pip install -e .
 from sixid import SixID
 
 agent = SixID(
-    api_url="https://api.intelexta.com",
+    api_url="https://kernel.intelexta.com",
     private_key_hex="your_ed25519_key_hex",
     agent_id="agent:demo_01",
 )

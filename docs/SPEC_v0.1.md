@@ -52,7 +52,7 @@ The repository uses a monorepo pattern to support multiple languages and documen
 **Constructor:**
 `__init__(self, api_url: str, private_key_hex: str, agent_id: str)`
 
-* `api_url`: The endpoint of the Verification Kernel (e.g., `https://api.intelexta.com`).
+* `api_url`: The endpoint of the Verification Kernel (e.g., `https://kernel.intelexta.com`).
 * `private_key_hex`: The 32-byte Ed25519 private key (hex string).
 * `agent_id`: The 6ID handle or agent reference (e.g., `agent:demo_01`).
 
