@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6ID Developer Center</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-okaidia.min.css">
+</head>
+<body>
+
+  <header class="hero">
+    <h1>6ID Developer Center</h1>
+    <p class="subtitle">The Standard for Non-Human Identity (NHI).</p>
+  </header>
+
+  <main>
+
+    <section class="demo">
+      <h2>Live Verification Demo</h2>
+      <div id="demo-video" class="video-placeholder">
+        <span>Demo Video — Coming Soon</span>
+      </div>
+      <p class="caption">Live Verification: Human (450ms) vs. Agent (12ms).</p>
+    </section>
+
+    <section class="quickstart">
+      <h2>Quick Start</h2>
+      <pre><code class="language-python">from sixid import SixID
+
+agent = SixID(
+    api_url="https://api.intelexta.com",
+    private_key_hex="your_key_hex",
+    agent_id="agent:demo_01",
+)
+
+proof = agent.certify_machinehood()
+print(proof)
+# {'status': 'CERTIFIED', 'latency_ms': '12.50'}</code></pre>
+    </section>
+
+    <section class="sdks">
+      <h2>SDKs</h2>
+      <div class="sdk-grid">
+        <a href="https://github.com/gaugefreedom/6id-sdk/tree/main/python" class="sdk-card">
+          <h3>Python</h3>
+          <span class="badge available">Available</span>
+        </a>
+        <a href="https://github.com/gaugefreedom/6id-sdk/tree/main/typescript" class="sdk-card">
+          <h3>TypeScript</h3>
+          <span class="badge soon">Coming Soon</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Contact <a href="mailto:sales@intelexta.com">sales@intelexta.com</a> for Private Beta Keys.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

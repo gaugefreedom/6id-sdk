@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sixid"
+version = "0.1.0b1"
+description = "6ID SDK — Non-Human Identity verification client for the Intelexta Causality Kernel"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.31.0",
+    "ed25519>=1.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/gaugefreedom/6id-sdk"
+Documentation = "https://gaugefreedom.github.io/6id-sdk/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
