@@ -19,28 +19,49 @@
     <section class="demo">
       <h2>Live Verification Demo</h2>
       <div id="demo-video" class="video-placeholder">
-        <span>Demo Video — Coming Soon</span>
+        <span>The "Reverse Turing Test" — Loading...</span>
       </div>
-      <p class="caption">Live Verification: Human (450ms) vs. Agent (12ms).</p>
+      <p class="caption">
+        <strong>The Problem:</strong> Humans masquerading as Algorithms.<br>
+        <strong>The Solution:</strong> 6ID rejects human reaction times (450ms) while certifying Agents (12ms).
+      </p>
+    </section>
+
+    <section class="features">
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>🚫 Prevent Masquerading</h3>
+          <p>Ensure sensitive API requests are triggered by autonomous code, not humans running scripts or click-farms.</p>
+        </div>
+        <div class="feature-card">
+          <h3>✅ Proof of Automation</h3>
+          <p>Generate a cryptographic receipt proving that data was processed by a machine model, ensuring privacy compliance.</p>
+        </div>
+      </div>
     </section>
 
     <section class="quickstart">
       <h2>Quick Start</h2>
+      <p>Install the SDK to sign your Agent's intent.</p>
       <pre><code class="language-python">from sixid import SixID
 
+# 1. Initialize with your Agent Passport
 agent = SixID(
     api_url="https://api.intelexta.com",
     private_key_hex="your_key_hex",
     agent_id="agent:demo_01",
 )
 
+# 2. Perform the Reverse Turing Test (<30ms)
 proof = agent.certify_machinehood()
+
+# 3. Get the Cryptographic Receipt
 print(proof)
-# {'status': 'CERTIFIED', 'latency_ms': '12.50'}</code></pre>
+# {'status': 'CERTIFIED', 'latency_ms': '12.50', 'receipt': 'sha256:...'}</code></pre>
     </section>
 
     <section class="sdks">
-      <h2>SDKs</h2>
+      <h2>Client SDKs</h2>
       <div class="sdk-grid">
         <a href="https://github.com/gaugefreedom/6id-sdk/tree/main/python" class="sdk-card">
           <h3>Python</h3>
