@@ -24,7 +24,11 @@ An agent proves its machine identity by completing a three-step handshake in und
 ## Quick Start (Python)
 
 ```bash
-cd python
+# Clone the repository
+git clone https://github.com/gaugefreedom/6id-sdk.git
+cd 6id-sdk/python
+
+# Install in editable mode
 pip install -e .
 ```
 
@@ -41,11 +45,13 @@ result = agent.certify_machinehood()
 print(result)
 # {'status': 'CERTIFIED', 'proof_type': 'execution_speed', 'latency_ms': '12.50', 'receipt': '...'}
 ```
+**Note:** Access to the Verification Kernel (`api_url`) is currently restricted to Private Beta partners.
+ To provision an Agent ID and Key Pair for your team, please contact **sales@intelexta.com**.
 
 ## Documentation
 
 - [SDK Specification](./docs/SPEC_v0.1.md)
-- [Developer Portal](https://gaugefreedom.github.io/6id-sdk/)
+- [Developer Portal](https://identity.intelexta.com/)
 
 ## License
 

@@ -5,14 +5,12 @@ import uuid
 try:
     from ed25519 import SigningKey
 except ImportError:
-    # This mock allows the class to load even if the C-library isn't present
-    # (Users will get a runtime error only when they try to sign)
     SigningKey = None
 
 class SixID:
     """
     SixID Client: The Standard for Non-Human Identity (NHI).
-    Connects to the Intelexta Causality Kernel to perform the 'Reverse Turing Test'.
+    Connects to the Intelexta Gateway (v0.1).
     """
     def __init__(self, api_url, private_key_hex, agent_id):
         self.api_url = api_url.rstrip('/')
@@ -27,37 +25,41 @@ class SixID:
         start_time = time.time()
         
         # 1. REQUEST CHALLENGE
-        # We generate a unique Idempotency-Key for this specific attempt
         reserve_idem_key = str(uuid.uuid4())
         
         try:
             res = requests.post(
-                f"{self.api_url}/v1/reserve", 
+                f"{self.api_url}/v1/a2a/reserve", 
                 json={
-                    "buyer_ref": self.agent_id,
-                    "resource_id": "cert:slot", 
+                    "buyer_sixid": self.agent_id,   # <--- FIXED: Matches engine.py
+                    "resource_id": "cert:slot",     # <--- FIXED: Matches engine.py
                     "qty": 1
                 }, 
                 headers={"Idempotency-Key": reserve_idem_key},
                 timeout=2
             )
-            # Handle potential Kernel errors gracefully
+            
             if res.status_code != 200:
-                return {"status": "ERROR", "reason": f"Reserve Failed ({res.status_code}): {res.text}"}
+                return {"status": "FAILED", "reason": f"Reserve Failed ({res.status_code}): {res.text}"}
                 
         except Exception as e:
             return {"status": "ERROR", "reason": f"Network unavailable: {e}"}
             
         data = res.json()
         
-        # Check if we got a challenge or if the slot was locked by someone else
-        if 'challenge' not in data:
-             return {"status": "FAILED", "reason": f"No Challenge Received: {data}"}
+        # Check for logic errors (e.g. {ok: False})
+        if not data.get('ok', True): 
+             return {"status": "FAILED", "reason": f"Gateway Reject: {data}"}
 
-        challenge_b64 = data['challenge']['message_b64']
+        # Handle Challenge
+        challenge_data = data.get('challenge') or data
+        if 'message_b64' not in challenge_data:
+             return {"status": "FAILED", "reason": f"No Challenge: {data}"}
+
+        challenge_b64 = challenge_data['message_b64']
         reservation_id = data['reservation_id']
         
-        # 2. PROVE IDENTITY (Sign the bytes)
+        # 2. PROVE IDENTITY (Sign)
         try:
             message_bytes = challenge_b64.encode('utf-8')
             signature_bytes = self.signer.sign(message_bytes)
@@ -69,11 +71,11 @@ class SixID:
         commit_idem_key = str(uuid.uuid4())
         
         commit_res = requests.post(
-            f"{self.api_url}/v1/commit", 
+            f"{self.api_url}/v1/a2a/commit", 
             json={
                 "reservation_id": reservation_id,
-                "buyer_ref": self.agent_id,
-                "resource_id": "cert:slot", # <--- FIXED: Added this required field
+                "buyer_sixid": self.agent_id,     # <--- FIXED
+                "resource_id": "cert:slot",       # <--- FIXED
                 "proof": {
                     "type": "ed25519",
                     "signature_b64": signature_b64
@@ -85,13 +87,12 @@ class SixID:
         latency_ms = (time.time() - start_time) * 1000
         
         if commit_res.status_code == 200:
+            receipt = commit_res.json().get('receipt', {}).get('id', 'mock-hash')
             return {
                 "status": "CERTIFIED",
                 "proof_type": "execution_speed",
                 "latency_ms": f"{latency_ms:.2f}",
-                "receipt": commit_res.json()['receipt_hash']
+                "receipt": receipt
             }
-        elif commit_res.status_code == 409:
-            return {"status": "FAILED", "reason": "Too Slow (>30ms) or Replay Attack"}
         else:
-            return {"status": "FAILED", "reason": f"Kernel Reject: {commit_res.text}"}
+            return {"status": "FAILED", "reason": f"Commit Failed: {commit_res.text}"}
