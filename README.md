@@ -4,15 +4,15 @@
 ![Proof: Execution Speed](https://img.shields.io/badge/Proof-Execution%20Speed-brightgreen)
 
 Official client libraries for the **Intelexta Identity (IXI)** platform.
-Verify Non-Human Identity (NHI) through cryptographic Execution Proofs against the Intelexta Causality Kernel.
+Verify Non-Human Identity (NHI) through cryptographic Execution Proofs against the Intelexta Gateway.
 
 ## How It Works
 
 An agent proves its machine identity by completing a three-step handshake in under 30 ms:
 
-1. **Request challenge** — reserve a certification slot on the Kernel
+1. **Request challenge** — reserve a certification slot on the Gateway (`/v1/a2a/reserve`)
 2. **Sign challenge** — sign the challenge bytes with Ed25519
-3. **Submit proof** — commit the signed proof and receive a verifiable receipt
+3. **Submit proof** — commit the signed proof and receive a verifiable receipt (`/v1/a2a/commit`)
 
 ## SDKs
 
@@ -36,7 +36,7 @@ pip install -e .
 from sixid import SixID
 
 agent = SixID(
-    api_url="https://kernel.intelexta.com",
+    api_url="https://api.6id.com",
     private_key_hex="your_ed25519_key_hex",
     agent_id="agent:demo_01",
 )
@@ -45,8 +45,8 @@ result = agent.certify_machinehood()
 print(result)
 # {'status': 'CERTIFIED', 'proof_type': 'execution_speed', 'latency_ms': '12.50', 'receipt': '...'}
 ```
-**Note:** Access to the Verification Kernel (`api_url`) is currently restricted to Private Beta partners.
- To provision an Agent ID and Key Pair for your team, please contact **sales@intelexta.com**.
+**Note:** Access to the Gateway (`api_url`) is currently restricted to Private Beta partners.
+To provision an Agent ID and Key Pair for your team, please contact **sales@intelexta.com**.
 
 ## Documentation
 

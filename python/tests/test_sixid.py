@@ -14,7 +14,7 @@ def test_constructor():
         private_key_hex=None,
         agent_id="agent:test_01",
     )
-    assert client.api_url == "http://localhost:3000"
+    assert client.api_url == "http://localhost:3000"  # rstrip('/') preserves clean URLs
     assert client.agent_id == "agent:test_01"
 
 
